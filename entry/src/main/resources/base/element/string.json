@@ -1,0 +1,36 @@
+{
+  "string": [
+	{
+	  "name": "module_desc",
+	  "value": "module description"
+	},
+	{
+	  "name": "EntryAbility_desc",
+	  "value": "description"
+	},
+	{
+	  "name": "EntryAbility_label",
+	  "value": "label"
+	},
+	  {
+		  "name": "location_permission",
+		  "value": "We need location permission to show your location"
+	  },
+	  {
+		  "name": "location_name",
+		  "value": "Enter Location Name"
+	  },
+	  {
+		  "name": "add_marker",
+		  "value": "Add Marker"
+	  },
+	  {
+		  "name": "cancel",
+		  "value": "Cancel"
+	  },
+	  {
+		  "name": "save",
+		  "value": "Save"
+	  }
+  ]
+}
