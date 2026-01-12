@@ -11,31 +11,33 @@ export default class LocationTable {
   constructor(context: common.UIAbilityContext, onReady: (ok: boolean) => void = () => {}) {
     this.table = new Rdb(
       context,
-      CommonConstantsDb.Favorite_Table.tableName,
-      CommonConstantsDb.Favorite_Table.sqlCreate,
-      CommonConstantsDb.Favorite_Table.columns
+      CommonConstantsDb.FAVORITE_TABLE.tableName,
+      CommonConstantsDb.FAVORITE_TABLE.sqlCreate,
+      CommonConstantsDb.FAVORITE_TABLE.columns
     );
     this.table.getRdbStore(onReady);
   }
 
-  /** Tüm kayıtları siler. */
+
   clearAll(callback: (success: boolean) => void): void {
-    const predicates = new relationalStore.RdbPredicates(CommonConstantsDb.Favorite_Table.tableName);
+    const predicates = new relationalStore.RdbPredicates(CommonConstantsDb.FAVORITE_TABLE.tableName);
     this.table.deleteData(predicates, (ok) => callback(ok));
   }
 
-  /** Tabloyu düşürür. */
   dropTable(callback: (success: boolean) => void): void {
-    const sql = `DROP TABLE IF EXISTS ${CommonConstantsDb.Favorite_Table.tableName}`;
+    const sql = `DROP TABLE IF EXISTS ${CommonConstantsDb.FAVORITE_TABLE.tableName}`;
     this.table.executeSql(sql, [], (err?: Error) => {
-      if (err) { console.error('Failed to drop table:', err); callback(false); }
-      else { callback(true); }
+      if (err) {
+        console.error('Failed to drop table:', err);
+        callback(false);
+      } else {
+        callback(true);
+      }
     });
   }
 
-  /** Kayıt sayısı. */
   getCount(callback: (count: number) => void): void {
-    const predicates = new relationalStore.RdbPredicates(CommonConstantsDb.Favorite_Table.tableName);
+    const predicates = new relationalStore.RdbPredicates(CommonConstantsDb.FAVORITE_TABLE.tableName);
     this.table.query(predicates, (rs) => {
       if (!rs) { callback(0); return; }
       const count = rs.rowCount;
@@ -44,7 +46,6 @@ export default class LocationTable {
     });
   }
 
-  /** Upsert (INSERT OR REPLACE) — id çatışırsa günceller. */
   upsertFavorite(item: FavoriteLocation, callback: (success: boolean) => void): void {
     const vb: relationalStore.ValuesBucket = {
       id: item.id,
@@ -57,9 +58,8 @@ export default class LocationTable {
       snippet: item.snippet ?? ''
     };
 
-    // ArkTS ArkData'da direkt "INSERT OR REPLACE" için executeSql:
     const sql = `
-      INSERT OR REPLACE INTO ${CommonConstantsDb.Favorite_Table.tableName}
+      INSERT OR REPLACE INTO ${CommonConstantsDb.FAVORITE_TABLE.tableName}
       (id, name, imageSource, description, isFavorite, latitude, longitude, snippet)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
@@ -76,29 +76,25 @@ export default class LocationTable {
     this.table.executeSql(sql, args, (err?: Error) => callback(!err));
   }
 
-  /** Favori bayrağını değiştirir. */
   setFavorite(id: string, isFav: boolean, callback: (success: boolean) => void): void {
-    const preds = new relationalStore.RdbPredicates(CommonConstantsDb.Favorite_Table.tableName).equalTo('id', id);
+    const preds = new relationalStore.RdbPredicates(CommonConstantsDb.FAVORITE_TABLE.tableName).equalTo('id', id);
     const vb: relationalStore.ValuesBucket = { isFavorite: isFav ? 1 : 0 };
     this.table.updateData(preds, vb, (ok) => callback(ok));
   }
 
-  /** Sadece snippet günceller. */
   updateSnippet(id: string, snippet: string, callback: (success: boolean) => void): void {
-    const preds = new relationalStore.RdbPredicates(CommonConstantsDb.Favorite_Table.tableName).equalTo('id', id);
+    const preds = new relationalStore.RdbPredicates(CommonConstantsDb.FAVORITE_TABLE.tableName).equalTo('id', id);
     const vb: relationalStore.ValuesBucket = { snippet };
     this.table.updateData(preds, vb, (ok) => callback(ok));
   }
 
-  /** Id ile siler. */
   deleteFavorite(id: string, callback: (success: boolean) => void): void {
-    const preds = new relationalStore.RdbPredicates(CommonConstantsDb.Favorite_Table.tableName).equalTo('id', id);
+    const preds = new relationalStore.RdbPredicates(CommonConstantsDb.FAVORITE_TABLE.tableName).equalTo('id', id);
     this.table.deleteData(preds, (ok) => callback(ok));
   }
 
-  /** Tek kayıt getirir. */
   getById(id: string, callback: (item: FavoriteLocation | null) => void): void {
-    const preds = new relationalStore.RdbPredicates(CommonConstantsDb.Favorite_Table.tableName).equalTo('id', id);
+    const preds = new relationalStore.RdbPredicates(CommonConstantsDb.FAVORITE_TABLE.tableName).equalTo('id', id);
     this.table.query(preds, (rs) => {
       if (!rs || rs.rowCount === 0 || !rs.goToFirstRow()) { rs?.close(); callback(null); return; }
       const out = this.rowToItem(rs);
@@ -107,11 +103,11 @@ export default class LocationTable {
     });
   }
 
-  /** Tüm kayıtları getirir (opsiyonel: sadece favoriler). */
   getAll(callback: (items: FavoriteLocation[]) => void, onlyFavorites = false): void {
-    const preds = new relationalStore.RdbPredicates(CommonConstantsDb.Favorite_Table.tableName);
-    if (onlyFavorites) preds.equalTo('isFavorite', 1);
-
+    const preds = new relationalStore.RdbPredicates(CommonConstantsDb.FAVORITE_TABLE.tableName);
+    if (onlyFavorites) {
+      preds.equalTo('isFavorite', 1);
+    }
     this.table.query(preds, (rs) => {
       if (!rs || rs.rowCount === 0) { rs?.close(); callback([]); return; }
       const items: FavoriteLocation[] = [];

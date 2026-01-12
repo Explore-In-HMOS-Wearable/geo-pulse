@@ -12,14 +12,13 @@ export default class CommonConstantsDb {
     securityLevel: relationalStore.SecurityLevel.S1
   };
 
-  // Marker + snippet için genişletilmiş tablo
-  static readonly Favorite_Table: TableDefinition = {
+  static readonly FAVORITE_TABLE: TableDefinition = {
     tableName: 'favoriteTable',
     sqlCreate: `CREATE TABLE IF NOT EXISTS favoriteTable (
-      id TEXT PRIMARY KEY,          -- kendi verdiğin id (ör: uuid veya lat:lng string)
-      name TEXT,                    -- marker başlığı
-      imageSource TEXT,             -- (opsiyonel) listede görsel
-      description TEXT,             -- (opsiyonel) açıklama
+      id TEXT PRIMARY KEY,         
+      name TEXT,                    
+      imageSource TEXT,             
+      description TEXT,            
       isFavorite INTEGER,           -- 0/1
       latitude REAL,                -- marker.lat
       longitude REAL,               -- marker.lng

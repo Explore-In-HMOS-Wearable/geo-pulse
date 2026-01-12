@@ -46,26 +46,20 @@ The app allows users to place markers on the map with attached text notes. When 
 # Directory Structure
 ```
 entry/src/main/ets/
-├── common/
-│   └── constants/
-│       └── StyleConstants.ets
+├── constants/
+│ └── StyleConstants.ets
 ├── entryability/
 │   └── EntryAbility.ets
 ├── entrybackupability/
 │   └── EntryBackupAbility.ets
 ├── model/
-│   ├── Note.ets
-│   └── LocationMarker.ets
+│   └── FavoriteLocation.ets
 ├── pages/
 │   ├── Index.ets
-│   └── MapPage.ets
+│   └── SplashPage.ets
 ├── service/
-│   ├── LocationService.ets
-│   ├── NotificationService.ets
-│   ├── BackgroundService.ets
-│   └── RdbService.ets
-└── resources/
-    └── module.json5
+│   ├── LocationTable.ets
+│   └── Rdb.ets
 ```
 
 
@@ -75,7 +69,7 @@ entry/src/main/ets/
 - Huawei Watch 5  
 
 
-# License
+# License (MIT)
 
-**GeoPulse** is distributed under the terms of the **MIT License**.  
+**GeoPulse** is distributed under the terms of the MIT License.  
 See the [LICENSE](LICENSE) file for more information.  

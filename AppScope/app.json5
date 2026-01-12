@@ -1,6 +1,6 @@
 {
   "app": {
-	"bundleName": "com.hmosdemos.geopulse",
+	"bundleName": "com.hmosdemos.wearable.geo_pulse",
 	"vendor": "hmosdemos",
 	"versionCode": 1000000,
 	"versionName": "1.0.0",

@@ -27,11 +27,11 @@ export class LocationUtil {
     return await atManager.checkAccessToken(tokenId, permission);
   }
 
-  async requestLocationPermissions(): Promise<boolean> {
+  async requestLocationPermissions(context: common.UIAbilityContext): Promise<boolean> {
     try {
       const atManager = abilityAccessCtrl.createAtManager();
       const result = await atManager.requestPermissionsFromUser(
-        getContext() as common.UIAbilityContext,
+        context,
         PERMISSIONS
       );
 
@@ -43,6 +43,8 @@ export class LocationUtil {
       return false;
     }
   }
+
+
 }
 
 export default new LocationUtil();

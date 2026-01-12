@@ -2,11 +2,9 @@
 import { relationalStore } from '@kit.ArkData';
 import CommonConstantsDb from '../constants/CommonConstantsDb';
 
-// ArkData executeSql bindArgs için geçerli değer tipleri
 export type SqlValue = string | number | Uint8Array | null;
 
-// Sorgu sonuçlarını dışarıda güvenle kapatabilmen için ResultSet'i callback'e veriyorum.
-// İstersen map'leyen yardımcı da ekleyebilirsin.
+
 export default class Rdb {
   private rdbStore: relationalStore.RdbStore | null = null;
   private readonly tableName: string;
@@ -21,7 +19,6 @@ export default class Rdb {
     this.columns = columns;
   }
 
-  /** RDB store'u açar ve tabloyu oluşturur. */
   getRdbStore(callback: (ok: boolean) => void): void {
     if (this.rdbStore) {
       callback(true);
@@ -45,7 +42,6 @@ export default class Rdb {
     });
   }
 
-  /** Ham SQL çalıştırır (SELECT dışı için uygundur). */
   executeSql(sql: string, args: SqlValue[] = [], callback?: (err?: Error) => void): void {
     if (!this.rdbStore) {
       callback?.(new Error('RDB store is null'));
@@ -61,7 +57,6 @@ export default class Rdb {
     });
   }
 
-  /** Insert (başarılıysa rowId >= 0 döner). */
   insertData(data: relationalStore.ValuesBucket, callback: (success: boolean, rowId?: number) => void): void {
     if (!this.rdbStore) {
       callback(false);
@@ -77,7 +72,6 @@ export default class Rdb {
     });
   }
 
-  /** Update (etkilenen satır sayısına göre success). */
   updateData(
     predicates: relationalStore.RdbPredicates,
     data: relationalStore.ValuesBucket,
@@ -97,7 +91,6 @@ export default class Rdb {
     });
   }
 
-  /** Delete (etkilenen satır sayısına göre success). */
   deleteData(
     predicates: relationalStore.RdbPredicates,
     callback: (success: boolean, rowsAffected?: number) => void
@@ -116,15 +109,6 @@ export default class Rdb {
     });
   }
 
-  /**
-   * Query: ResultSet'i callback'e veriyoruz; İŞİN BİTİNCE SEN KAPAT.
-   * Örnek:
-   *   rdb.query(preds, (rs) => {
-   *     if (!rs) return;
-   *     if (rs.rowCount > 0 && rs.goToFirstRow()) { ... }
-   *     rs.close();
-   *   });
-   */
   query(
     predicates: relationalStore.RdbPredicates,
     callback: (rs: relationalStore.ResultSet | null) => void
@@ -139,7 +123,7 @@ export default class Rdb {
         callback(null);
         return;
       }
-      callback(rs); // Dışarıda rs.close() çağırmayı unutma.
+      callback(rs);
     });
   }
 }

@@ -8,7 +8,7 @@ export struct SplashPage {
   @Provide('NavPathStack') pageStack: NavPathStack = new NavPathStack()
   aboutToAppear() {
     setTimeout(() => {
-      this.pageStack.replacePathByName('Index',null)
+      this.pageStack.replacePathByName('Index', null)
     }, ConstantUI.SPLASH_DELAY_MS)
   }
 
